@@ -5,4 +5,5 @@ This repo serves it's purpouse as a repo that contains the solutions for the ful
 The course materials can be found at [their website](https://fullstackopen.com/), as well with the instructions for uploading.
 
 ## Contents
-- Part0
+- [Part 0](./part0)
+- [Part 1](./part1)
