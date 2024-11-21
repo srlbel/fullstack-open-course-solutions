@@ -1,15 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import personService from './services/PersonService'
 import Form from './Form';
 import List from './List';
 import Filter from './Filter';
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
-  ]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [newFilter, setNewFilter] = useState('');
@@ -18,18 +14,59 @@ const App = () => {
   const handleNumberChange = (event) => setNewNumber(event.target.value);
   const handleFilterChange = (event) => setNewFilter(event.target.value);
 
+  useEffect(() => {
+    personService
+      .getAll()
+      .then((response) => {
+        setPersons(response.data);
+      })
+  }, []);
+
   const notesToShow = newFilter
     ? persons.filter(person => person.name.includes(newFilter))
     : persons
 
   const addPerson = (event) => {
     event.preventDefault();
-    const newId = persons[persons.length - 1].id + 1
-    const personObject = { id: newId, name: newName, number: newNumber };
-    setPersons([...persons, personObject]);
+    const isRepeated = persons.filter(person => person.name === newName)
+    const repeatedPerson = isRepeated[0];
+
+    const personObject = { ...repeatedPerson, name: newName, number: newNumber };
+
+    if (isRepeated.length > 0) {
+      if (window.confirm(`${personObject.name} is already added on the phonebook, replace the current number with the new one?`)) {
+
+        personService
+          .update(personObject.id, personObject)
+          .then(() => {
+            setPersons(persons.map(person => person.id !== personObject.id ? person : personObject))
+          })
+
+        setNewName('');
+        setNewNumber('');
+        return;
+      }
+    }
+
+    personService
+      .create(personObject)
+      .then((response) => {
+        setPersons(persons.concat(response.data));
+      })
+
     setNewName('');
     setNewNumber('');
   };
+
+  const handleDelete = (name, id) => {
+    if (window.confirm(`Delete ${name} ?`)) {
+      personService
+        .delete(id)
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== id))
+        })
+    };
+  }
 
   return (
     <div>
@@ -44,7 +81,10 @@ const App = () => {
         addPerson={addPerson}
       />
       <h2>Numbers</h2>
-      <List persons={notesToShow} />
+      <List
+        persons={notesToShow}
+        handleDelete={handleDelete}
+      />
     </div>
   );
 };
