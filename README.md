@@ -11,7 +11,7 @@ The course materials can be found at [their website](https://fullstackopen.com/)
 | [Part 0](./part0)  | <ul><li>- [x] </li> </ul> |
 | [Part 1](./part1)  | <ul><li>- [x] </li> </ul> |
 | [Part 2](./part2/) | <ul><li>- [x] </li> </ul> |
-| [Part 3](./part3/) | <ul><li>- [ ] </li> </ul> |
+| [Part 3](./part3/) | <ul><li>- [x] </li> </ul> |
 | [Part 4]() | <ul><li>- [ ] </li> </ul> |
 | [Part 5]() | <ul><li>- [ ] </li> </ul> |
 | [Part 6]() | <ul><li>- [ ] </li> </ul> |
