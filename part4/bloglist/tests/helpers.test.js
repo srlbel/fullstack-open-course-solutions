@@ -98,6 +98,19 @@ describe('favorite blog', () => {
       likes: 12,
     }
 
-    assert.deepStrictEqual(result, expectedResult, "Expected result wasn't found")
+    assert.deepStrictEqual(result, expectedResult)
+  })
+})
+
+describe('most blogs', () => {
+  test('of a big list', () => {
+    const result = listHelper.mostBlogs(blogs)
+
+    const expectedResult = {
+      author: "Robert C. Martin",
+      blogs: 3
+    }
+
+    assert.deepStrictEqual(result, expectedResult)
   })
 })
