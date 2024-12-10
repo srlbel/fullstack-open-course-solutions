@@ -35,6 +35,16 @@ const blogs = [
   }
 ]
 
+const listWithOneBlog = [
+  {
+    title: "First class tests",
+    author: "Robert C. Martin",
+    likes: 10,
+  }
+]
+
+const emptyList = []
+
 test('dummy returns one', () => {
   const blogs = []
 
@@ -43,35 +53,6 @@ test('dummy returns one', () => {
 })
 
 describe('total likes', () => {
-  const listWithOneBlog = [
-    {
-      title: 'Go To Statement Considered Harmful',
-      author: 'Edsger W. Dijkstra',
-      likes: 5,
-    }
-  ]
-
-  const listWithManyBlogs = [
-    {
-      title: 'Go To Statement Considered Harmful',
-      author: 'Edsger W. Dijkstra',
-      likes: 5,
-    },
-    {
-      title: 'Go To Statement Considered Harmful',
-      author: 'Edsger W. Dijkstra',
-      likes: 15,
-    },
-    {
-      title: 'Go To Statement Considered Harmful',
-      author: 'Edsger W. Dijkstra',
-      likes: 20,
-    }
-  ]
-
-  const emptyList = []
-
-
   test('of empty list is zero', () => {
     const result = listHelper.totalLikes(emptyList)
     assert.strictEqual(result, 0)
@@ -79,12 +60,12 @@ describe('total likes', () => {
 
   test('when list has only one blog equals the likes of that', () => {
     const result = listHelper.totalLikes(listWithOneBlog)
-    assert.strictEqual(result, 5)
+    assert.strictEqual(result, 10)
   })
 
   test('of a bigger list is calculated right', () => {
-    const result = listHelper.totalLikes(listWithManyBlogs)
-    assert.strictEqual(result, 40)
+    const result = listHelper.totalLikes(blogs)
+    assert.strictEqual(result, 36)
   })
 })
 
