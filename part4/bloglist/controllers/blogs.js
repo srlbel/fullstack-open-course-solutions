@@ -1,25 +1,28 @@
-const blogRoutes = require('express').Router()
-const Blog = require('../models/blog')
+const blogRoutes = require("express").Router();
+const Blog = require("../models/blog");
 
-blogRoutes.get('/', (request, response, next) => {
-  Blog
-    .find({})
-    .then(blogs => {
-      response.json(blogs)
-    })
-    .catch((e) => next(e))
-})
+blogRoutes.get("/", async (request, response, next) => {
+  const blogs = await Blog.find({});
 
+  response.status(200).json(blogs);
+});
 
-blogRoutes.post('/', (request, response, next) => {
-  const blog = new Blog(request.body)
+blogRoutes.post("/", async (request, response, next) => {
+  const body = request.body
 
-  blog
-    .save()
-    .then(result => {
-      response.status(201).json(result)
-    })
-    .catch((e) => next(e))
-})
+  if (!body.title || !body.url) {
+    response.status(400).json({ error: 'Fields Missing' })
+  }
 
-module.exports = blogRoutes
+  const blog = new Blog({
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    likes: body.likes || 0
+  });
+
+  const savedBlog = await blog.save()
+  response.status(201).json(savedBlog)
+});
+
+module.exports = blogRoutes;
