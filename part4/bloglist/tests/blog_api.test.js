@@ -115,6 +115,32 @@ describe("blog endpoint tests", () => {
 
     assert.strictEqual(response.status, 400)
   })
+
+  test('succeeds with status code 204 if blog is deleted', async () => {
+    const blogs = await Blog.find({})
+    const blogToDelete = blogs[0]
+
+    const response = await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+
+    assert.strictEqual(response.status, 204)
+  })
+
+  test('succeeds with status code 200 and updates likes', async () => {
+    const blogs = await Blog.find({})
+    const blogToUpdate = blogs[0]
+
+    const updatedData = { likes: blogToUpdate.likes + 1 };
+
+    const response = await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(updatedData)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    assert.strictEqual(response.body.likes, updatedData.likes);
+  })
 });
 
 after(async () => {

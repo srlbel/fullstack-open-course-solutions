@@ -25,4 +25,37 @@ blogRoutes.post("/", async (request, response, next) => {
   response.status(201).json(savedBlog)
 });
 
+blogRoutes.delete("/:id", async (request, response, next) => {
+  const { id } = request.params;
+  const deletedBlog = await Blog.findByIdAndDelete(id);
+
+  if (!deletedBlog) {
+    response.status(404).json({ error: "Blog not found" });
+  }
+
+  response.status(204).end();
+});
+
+blogRoutes.put("/:id", async (request, response, next) => {
+  const { id } = request.params;
+  const { likes } = request.body;
+
+  if (likes === undefined) {
+    response.status(400).json({ error: "Likes property is required" });
+  }
+
+  const updatedBlog = await Blog.findByIdAndUpdate(
+    id,
+    { likes },
+    { new: true, runValidators: true }
+  );
+
+  if (!updatedBlog) {
+    return response.status(404).json({ error: "Blog not found" });
+  }
+
+  response.status(200).json(updatedBlog);
+});
+
+
 module.exports = blogRoutes;
