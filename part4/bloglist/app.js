@@ -5,6 +5,7 @@ const cors = require("cors");
 const config = require("./utils/config");
 const logger = require("./utils/logger");
 const blogRoutes = require("./controllers/blogs");
+const usersRoutes = require('./controllers/users')
 const middleware = require("./utils/middleware");
 
 const app = express();
@@ -23,6 +24,7 @@ app.use(express.json());
 app.use(middleware.requestLogger);
 
 app.use("/api/blogs", blogRoutes);
+app.use('/api/users', usersRoutes)
 
 app.use(middleware.errorHandler);
 app.use(middleware.unknownEndpoint);
