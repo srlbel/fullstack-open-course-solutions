@@ -1,7 +1,5 @@
 const blogRoutes = require('express').Router()
-const jwt = require('jsonwebtoken')
 const Blog = require('../models/blog')
-const User = require('../models/user')
 
 blogRoutes.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
@@ -11,13 +9,8 @@ blogRoutes.get('/', async (request, response) => {
 
 blogRoutes.post('/', async (request, response) => {
   const body = request.body
-
-  const decodedToken = jwt.verify(request.token, process.env.JWT_SECRET)
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: 'invalid token' })
-  }
-
-  const user = await User.findById(decodedToken.id)
+  const user = request.user
+  if (!user) return response.status(401).json({ error: 'Unauthorized User' })
 
   if (!body.title || !body.url) {
     response.status(400).json({ error: 'Fields Missing' })
@@ -41,14 +34,8 @@ blogRoutes.post('/', async (request, response) => {
 
 blogRoutes.delete('/:id', async (request, response) => {
   const { id } = request.params
-
-  const decodedToken = jwt.verify(request.token, process.env.JWT_SECRET)
-
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: 'invalid token' })
-  }
-
-  const user = await User.findById(decodedToken.id)
+  const user = request.user
+  if (!user) return response.status(401).json({ error: 'Unauthorized User' })
 
   const blogToDelete = await Blog.findById(id)
 
@@ -57,7 +44,7 @@ blogRoutes.delete('/:id', async (request, response) => {
   }
 
   if (blogToDelete.user._id.toString() !== user._id.toString()) {
-    return response.status(400).json({ error: 'validation failed' })
+    return response.status(403).json({ error: 'Validation Failed' })
   }
 
   await Blog.findByIdAndDelete(id)
