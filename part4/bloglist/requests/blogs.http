@@ -1,14 +1,15 @@
 ### Post a blog
-POST http://localhost:3001/api/blog
+POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
   "title": "test",
   "author": "test",
   "url": "String",
-  "likes": {{$randomInt 0 20}}
+  "likes": {{$randomInt 0 20}},
+  "userId": "67603671c4ff661d008e82cf"
 }
 
 
 ### get all blogs
-GET http://localhost:3001/api/blog
+GET http://localhost:3001/api/blogs
