@@ -1,11 +1,17 @@
+//libs
 const express = require('express')
 require('express-async-errors')
 const mongoose = require('mongoose')
 const cors = require('cors')
+
+//utils
 const config = require('./utils/config')
 const logger = require('./utils/logger')
+
+// routes & middleware
 const blogRoutes = require('./controllers/blogs')
 const usersRoutes = require('./controllers/users')
+const loginRoutes = require('./controllers/login')
 const middleware = require('./utils/middleware')
 
 const app = express()
@@ -25,6 +31,7 @@ app.use(middleware.requestLogger)
 
 app.use('/api/blogs', blogRoutes)
 app.use('/api/users', usersRoutes)
+app.use('/api/login', loginRoutes)
 
 app.use(middleware.errorHandler)
 app.use(middleware.unknownEndpoint)
