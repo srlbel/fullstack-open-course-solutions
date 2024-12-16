@@ -54,9 +54,20 @@ blogRoutes.delete('/:id', async (request, response) => {
 blogRoutes.put('/:id', async (request, response) => {
   const { id } = request.params
   const { likes } = request.body
+  const user = request.user
+  if (!user) return response.status(401).json({ error: 'Unauthorized User' })
 
   if (likes === undefined) {
     response.status(400).json({ error: 'Likes property is required' })
+  }
+
+  const blogToUpdate = await Blog.findById(id)
+  if (!blogToUpdate) {
+    return response.status(404).json({ error: 'Blog not found' })
+  }
+
+  if (blogToUpdate.user._id.toString() !== user._id.toString()) {
+    return response.status(403).json({ error: 'Validation Failed' })
   }
 
   const updatedBlog = await Blog.findByIdAndUpdate(
@@ -64,10 +75,6 @@ blogRoutes.put('/:id', async (request, response) => {
     { likes },
     { new: true, runValidators: true }
   )
-
-  if (!updatedBlog) {
-    return response.status(404).json({ error: 'Blog not found' })
-  }
 
   response.status(200).json(updatedBlog)
 })
