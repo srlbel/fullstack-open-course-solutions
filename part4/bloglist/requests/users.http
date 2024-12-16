@@ -3,10 +3,9 @@ POST http://localhost:3001/api/users
 Content-Type: application/json
 
 {
-  "title": "test",
-  "author": "test",
-  "url": "String",
-  "likes": {{$randomInt 0 20}}
+  "username": "test",
+  "name": "test",
+  "password": "a password"
 }
 
 
