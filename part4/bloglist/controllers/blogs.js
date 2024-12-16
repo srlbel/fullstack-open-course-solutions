@@ -41,13 +41,27 @@ blogRoutes.post('/', async (request, response) => {
 
 blogRoutes.delete('/:id', async (request, response) => {
   const { id } = request.params
-  const deletedBlog = await Blog.findByIdAndDelete(id)
 
-  if (!deletedBlog) {
-    response.status(404).json({ error: 'Blog not found' })
+  const decodedToken = jwt.verify(request.token, process.env.JWT_SECRET)
+
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'invalid token' })
   }
 
-  response.status(204).end()
+  const user = await User.findById(decodedToken.id)
+
+  const blogToDelete = await Blog.findById(id)
+
+  if (!blogToDelete) {
+    return response.status(404).json({ error: 'Blog not found' })
+  }
+
+  if (blogToDelete.user._id.toString() !== user._id.toString()) {
+    return response.status(400).json({ error: 'validation failed' })
+  }
+
+  await Blog.findByIdAndDelete(id)
+  return response.status(204).end()
 })
 
 blogRoutes.put('/:id', async (request, response) => {
