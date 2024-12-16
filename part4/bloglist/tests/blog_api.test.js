@@ -1,51 +1,51 @@
-const { test, after, beforeEach, describe } = require("node:test");
-const mongoose = require("mongoose");
-const supertest = require("supertest");
-const app = require("../app");
-const assert = require("node:assert");
-const Blog = require("../models/blog");
+const { test, after, beforeEach, describe } = require('node:test')
+const mongoose = require('mongoose')
+const supertest = require('supertest')
+const app = require('../app')
+const assert = require('node:assert')
+const Blog = require('../models/blog')
 
-const api = supertest(app);
+const api = supertest(app)
 
 const initialBlogs = [
   {
-    title: "A title",
-    author: "Linus Torvalds",
-    url: "http://localhost",
+    title: 'A title',
+    author: 'Linus Torvalds',
+    url: 'http://localhost',
     likes: 15,
   },
   {
-    title: "Nowhere like home",
-    author: "A Magician",
-    url: "http://127.0.0.1",
+    title: 'Nowhere like home',
+    author: 'A Magician',
+    url: 'http://127.0.0.1',
     likes: 5,
   },
-];
+]
 
 beforeEach(async () => {
-  await Blog.deleteMany({});
+  await Blog.deleteMany({})
 
   const blogObjects = initialBlogs.map(blog => new Blog(blog))
   const promiseArray = blogObjects.map(blog => blog.save())
   await Promise.all(promiseArray)
-});
+})
 
-describe("blog endpoint tests", () => {
-  test("blogs are returned as json", async () => {
+describe('blog endpoint tests', () => {
+  test('blogs are returned as json', async () => {
     await api
-      .get("/api/blogs")
+      .get('/api/blogs')
       .expect(200)
-      .expect("Content-Type", /application\/json/);
-  });
+      .expect('Content-Type', /application\/json/)
+  })
 
-  test("there are two blogs", async () => {
-    const response = await api.get("/api/blogs");
+  test('there are two blogs', async () => {
+    const response = await api.get('/api/blogs')
 
-    assert.strictEqual(response.body.length, initialBlogs.length);
-  });
+    assert.strictEqual(response.body.length, initialBlogs.length)
+  })
 
-  test("blogs return with id instead of _id", async () => {
-    const response = await api.get("/api/blogs")
+  test('blogs return with id instead of _id', async () => {
+    const response = await api.get('/api/blogs')
 
     assert.ok(response.body[0].id)
     assert.strictEqual(response.body[0]._id, undefined)
@@ -53,9 +53,9 @@ describe("blog endpoint tests", () => {
 
   test('creating a new blog increases the total count by one', async () => {
     const newBlog = {
-      title: "new title",
-      author: "new author",
-      url: "new url",
+      title: 'new title',
+      author: 'new author',
+      url: 'new url',
       likes: 0
     }
 
@@ -71,16 +71,16 @@ describe("blog endpoint tests", () => {
 
   test('missing likes default to 0', async () => {
     const newBlog = {
-      title: "new title",
-      author: "new author",
-      url: "new url",
+      title: 'new title',
+      author: 'new author',
+      url: 'new url',
     }
 
     const response = await api
       .post('/api/blogs')
       .send(newBlog)
       .expect(201)
-      .expect('Content-Type', /application\/json/);
+      .expect('Content-Type', /application\/json/)
 
     const savedBlog = response.body
     assert.strictEqual(savedBlog.likes, 0)
@@ -91,12 +91,12 @@ describe("blog endpoint tests", () => {
       author: 'Test Author',
       url: 'http://example.com',
       likes: 10,
-    };
+    }
 
     const response = await api
       .post('/api/blogs')
       .send(newBlog)
-      .expect(400);
+      .expect(400)
 
     assert.strictEqual(response.status, 400)
   })
@@ -106,12 +106,12 @@ describe("blog endpoint tests", () => {
       author: 'Test Author',
       title: 'Test Title',
       likes: 10,
-    };
+    }
 
     const response = await api
       .post('/api/blogs')
       .send(newBlog)
-      .expect(400);
+      .expect(400)
 
     assert.strictEqual(response.status, 400)
   })
@@ -131,18 +131,18 @@ describe("blog endpoint tests", () => {
     const blogs = await Blog.find({})
     const blogToUpdate = blogs[0]
 
-    const updatedData = { likes: blogToUpdate.likes + 1 };
+    const updatedData = { likes: blogToUpdate.likes + 1 }
 
     const response = await api
       .put(`/api/blogs/${blogToUpdate.id}`)
       .send(updatedData)
       .expect(200)
-      .expect('Content-Type', /application\/json/);
+      .expect('Content-Type', /application\/json/)
 
-    assert.strictEqual(response.body.likes, updatedData.likes);
+    assert.strictEqual(response.body.likes, updatedData.likes)
   })
-});
+})
 
 after(async () => {
-  await mongoose.connection.close();
-});
+  await mongoose.connection.close()
+})
