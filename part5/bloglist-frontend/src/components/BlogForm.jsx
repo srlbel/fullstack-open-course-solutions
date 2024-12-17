@@ -16,7 +16,7 @@ const BlogForm = ({ handleSubmit, title, setTitle, url, setUrl }) => {
           type='text'
           value={url}
           name='url'
-          onChange={({ target }) => setUrl(target.url)}
+          onChange={({ target }) => setUrl(target.value)}
         />
       </div>
       <button type="submit">post blog</button>
