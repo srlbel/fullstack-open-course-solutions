@@ -55,7 +55,16 @@ const App = () => {
   }
 
   const handleSubmit = async (event) => {
-    try { } catch (e) { }
+    event.preventDefault()
+
+    try {
+      const response = await blogService.create({ title, url })
+      setBlogs([response, ...blogs])
+      setTitle('')
+      setUrl('')
+    } catch (e) {
+      console.error('error handling input data', e)
+    }
   }
 
 
