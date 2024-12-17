@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react'
+import './styles/notification.css'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
+  const [notification, setNotification] = useState(null)
   const [blogs, setBlogs] = useState([])
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
@@ -44,7 +47,10 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (e) {
-      console.error('wrong credetials')
+      setNotification({ message: e.response.data.error, type: 'error' })
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
     }
   }
 
@@ -59,6 +65,10 @@ const App = () => {
 
     try {
       const response = await blogService.create({ title, url })
+      setNotification({ message: `a new blog '${response.title}' by ${response.author} added`, type: 'success' })
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
       setBlogs([response, ...blogs])
       setTitle('')
       setUrl('')
@@ -71,6 +81,7 @@ const App = () => {
   if (user === null) {
     return (
       <div>
+        {notification && <Notification message={notification.message} type={notification.type} />}
         <h2>log in</h2>
         <LoginForm
           handleLogin={handleLogin}
@@ -86,6 +97,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      {notification && <Notification message={notification.message} type={notification.type} />}
       <p> {user.name} logged in. <button onClick={() => handleLogout()}>log out</button></p>
       <BlogForm
         handleSubmit={handleSubmit}
