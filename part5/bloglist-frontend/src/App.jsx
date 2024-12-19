@@ -11,8 +11,6 @@ import loginService from './services/login'
 const App = () => {
   const [notification, setNotification] = useState(null)
   const [blogs, setBlogs] = useState([])
-  const [title, setTitle] = useState('')
-  const [url, setUrl] = useState('')
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -61,18 +59,19 @@ const App = () => {
     window.localStorage.removeItem('loggedUser')
   }
 
-  const handleSubmit = async (event) => {
-    event.preventDefault()
-
+  const createBlog = async (blogObject) => {
     try {
-      const response = await blogService.create({ title, url })
-      setNotification({ message: `a new blog '${response.title}' by ${response.author} added`, type: 'success' })
+      const response = await blogService.create(blogObject)
+
+      setNotification({
+        message: `a new blog '${response.title}' by ${response.author} added`,
+        type: 'success'
+      })
       setTimeout(() => {
         setNotification(null)
       }, 5000)
-      setBlogs([response, ...blogs])
-      setTitle('')
-      setUrl('')
+
+      setBlogs([...blogs, response])
     } catch (e) {
       console.error('error handling input data', e)
     }
@@ -103,13 +102,7 @@ const App = () => {
       {notification && <Notification message={notification.message} type={notification.type} />}
       <p> {user.name} logged in. <button onClick={() => handleLogout()}>log out</button></p>
       <Toggalge buttonLabel='new blog'>
-        <BlogForm
-          handleSubmit={handleSubmit}
-          title={title}
-          setTitle={setTitle}
-          url={url}
-          setUrl={setUrl}
-        />
+        <BlogForm createBlog={createBlog} />
       </Toggalge>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
