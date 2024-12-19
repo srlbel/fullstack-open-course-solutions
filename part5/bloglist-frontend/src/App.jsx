@@ -101,9 +101,11 @@ const App = () => {
       <h2>blogs</h2>
       {notification && <Notification message={notification.message} type={notification.type} />}
       <p> {user.name} logged in. <button onClick={() => handleLogout()}>log out</button></p>
-      <Toggalge buttonLabel='new blog'>
+
+      <Toggalge buttonLabel='create new blog'>
         <BlogForm createBlog={createBlog} />
       </Toggalge>
+
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
