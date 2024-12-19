@@ -2,11 +2,10 @@ import { useState } from "react"
 
 const ToggableBlog = (props) => {
   const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
+    paddingLeft: 5,
     border: 'solid',
     borderWidth: 1,
-    marginBottom: 5,
+    marginBottom: 1,
   }
   const [visible, setVisible] = useState(false)
 
@@ -29,15 +28,13 @@ const ToggableBlog = (props) => {
   )
 }
 
-const Blog = ({ blog }) => {
-  return (
-    <ToggableBlog
-      title={blog.title}
-      author={blog.author}
-      url={blog.url}
-      likes={0}
-    />
-  )
-}
+const Blog = ({ blog, updateLikes }) =>
+  <ToggableBlog
+    title={blog.title}
+    author={blog.author}
+    url={blog.url}
+    likes={blog.likes}
+  />
+
 
 export default Blog
