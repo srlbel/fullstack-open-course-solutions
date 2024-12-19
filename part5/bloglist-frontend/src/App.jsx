@@ -4,6 +4,7 @@ import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
+import Toggalge from './components/Toggable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -81,15 +82,17 @@ const App = () => {
   if (user === null) {
     return (
       <div>
-        {notification && <Notification message={notification.message} type={notification.type} />}
         <h2>log in</h2>
-        <LoginForm
-          handleLogin={handleLogin}
-          username={username}
-          setUsername={setUsername}
-          password={password}
-          setPassword={setPassword}
-        />
+        <Toggalge buttonLabel="log in">
+          {notification && <Notification message={notification.message} type={notification.type} />}
+          <LoginForm
+            handleLogin={handleLogin}
+            username={username}
+            setUsername={setUsername}
+            password={password}
+            setPassword={setPassword}
+          />
+        </Toggalge>
       </div>
     )
   }
@@ -99,13 +102,15 @@ const App = () => {
       <h2>blogs</h2>
       {notification && <Notification message={notification.message} type={notification.type} />}
       <p> {user.name} logged in. <button onClick={() => handleLogout()}>log out</button></p>
-      <BlogForm
-        handleSubmit={handleSubmit}
-        title={title}
-        setTitle={setTitle}
-        url={url}
-        setUrl={setUrl}
-      />
+      <Toggalge buttonLabel='new blog'>
+        <BlogForm
+          handleSubmit={handleSubmit}
+          title={title}
+          setTitle={setTitle}
+          url={url}
+          setUrl={setUrl}
+        />
+      </Toggalge>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
