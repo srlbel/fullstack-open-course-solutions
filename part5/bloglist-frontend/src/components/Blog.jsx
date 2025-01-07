@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const ToggableBlog = ({ title, author, url, likes, id, updateBlog }) => {
+const ToggableBlog = ({ title, author, url, likes, id, updateBlog, deleteBlog }) => {
   const blogStyle = {
     paddingLeft: 5,
     border: "solid",
@@ -20,6 +20,14 @@ const ToggableBlog = ({ title, author, url, likes, id, updateBlog }) => {
 
     updateBlog(id, updatedBlog);
   };
+
+  const removeBlog = () => {
+    const blogToDelete = id
+
+    const isAccepted = window.confirm(`You are about to delete ${title} by ${author}. Continue?`)
+
+    if (isAccepted) deleteBlog(blogToDelete, { title, author })
+  }
 
   const [visible, setVisible] = useState(false);
 
@@ -43,12 +51,13 @@ const ToggableBlog = ({ title, author, url, likes, id, updateBlog }) => {
           <button onClick={updateLikes}>like</button>
         </p>
         <p>{author}</p>
+        <button onClick={removeBlog}>delete</button>
       </div>
     </div>
   );
 };
 
-const Blog = ({ blog, updateBlog }) => (
+const Blog = ({ blog, updateBlog, deleteBlog }) => (
   <ToggableBlog
     title={blog.title}
     id={blog.id}
@@ -56,6 +65,7 @@ const Blog = ({ blog, updateBlog }) => (
     url={blog.url}
     likes={blog.likes}
     updateBlog={updateBlog}
+    deleteBlog={deleteBlog}
   />
 );
 

@@ -96,6 +96,24 @@ const App = () => {
     }
   }
 
+  const deleteBlog = async (id, blogData) => {
+    try {
+      const response = await blogService.remove(id)
+
+      setNotification({
+        message: `'${blogData.title}' by ${blogData.author} was removed from the records.`,
+        type: 'success'
+      })
+
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
+
+      setBlogs(blogs.filter(blog => blog.id !== id))
+    } catch (e) {
+      console.error('error deleting data', e)
+    }
+  }
 
   if (user === null) {
     return (
@@ -129,7 +147,7 @@ const App = () => {
         .slice()
         .sort((a, b) => b.likes - a.likes)
         .map(blog =>
-          <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+          <Blog key={blog.id} blog={blog} updateBlog={updateBlog} deleteBlog={deleteBlog} />
         )}
     </div>
   )
