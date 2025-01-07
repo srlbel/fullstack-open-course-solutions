@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 
 const ToggableBlog = ({ title, author, url, likes, id, updateBlog, deleteBlog }) => {
   const blogStyle = {
     paddingLeft: 5,
-    border: "solid",
+    border: 'solid',
     borderWidth: 1,
     marginBottom: 5,
     marginTop: 5,
-  };
+  }
 
   const updateLikes = () => {
     const updatedBlog = {
@@ -17,10 +17,10 @@ const ToggableBlog = ({ title, author, url, likes, id, updateBlog, deleteBlog })
       url,
       likes: likes + 1,
       id,
-    };
+    }
 
-    updateBlog(id, updatedBlog);
-  };
+    updateBlog(id, updatedBlog)
+  }
 
   const removeBlog = () => {
     const blogToDelete = id
@@ -30,13 +30,13 @@ const ToggableBlog = ({ title, author, url, likes, id, updateBlog, deleteBlog })
     if (isAccepted) deleteBlog(blogToDelete, { title, author })
   }
 
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(false)
 
-  const showWhenVisible = { display: visible ? "" : "none" };
+  const showWhenVisible = { display: visible ? '' : 'none' }
 
   const toggleVisibility = () => {
-    setVisible(!visible);
-  };
+    setVisible(!visible)
+  }
 
   return (
     <div style={blogStyle}>
@@ -55,8 +55,8 @@ const ToggableBlog = ({ title, author, url, likes, id, updateBlog, deleteBlog })
         <button onClick={removeBlog}>delete</button>
       </div>
     </div>
-  );
-};
+  )
+}
 
 const Blog = ({ blog, updateBlog, deleteBlog }) => (
   <ToggableBlog
@@ -68,7 +68,7 @@ const Blog = ({ blog, updateBlog, deleteBlog }) => (
     updateBlog={updateBlog}
     deleteBlog={deleteBlog}
   />
-);
+)
 
 // prop definition
 ToggableBlog.propTypes = {
@@ -82,4 +82,4 @@ ToggableBlog.propTypes = {
 
 
 
-export default Blog;
+export default Blog
