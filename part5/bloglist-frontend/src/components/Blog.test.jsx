@@ -20,8 +20,8 @@ describe('<Blog />', () => {
     // FIX: Url & Likes are being captured even when they're not displayed
     const url = screen.queryByText('http://url.com')
     const likes = screen.queryByText('likes 10')
-    expect(url).toBeNull()
-    expect(likes).toBeNull()
+    expect(url.parentElement).toHaveStyle('display: none')
+    expect(likes.parentElement).toHaveStyle('display: none')
   })
 
 })
