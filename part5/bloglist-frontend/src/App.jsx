@@ -98,6 +98,20 @@ const App = () => {
 
   const deleteBlog = async (id, blogData) => {
     try {
+
+      if (user.username !== blogData.author) {
+        setNotification({
+          message: `Can't delete data that it's not own by the user`,
+          type: 'error'
+        })
+
+        setTimeout(() => {
+          setNotification(null)
+        }, 5000)
+
+        return
+      }
+
       await blogService.remove(id)
 
       setNotification({
