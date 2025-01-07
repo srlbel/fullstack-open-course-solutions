@@ -77,6 +77,25 @@ const App = () => {
     }
   }
 
+  const updateBlog = async (id, blogObject) => {
+    try {
+      const response = await blogService.update(id, blogObject)
+
+      setNotification({
+        message: `added like to '${response.title}' by ${response.author}.`,
+        type: 'success'
+      })
+
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
+
+      setBlogs(blogs.map(blog => blog.id !== blogObject.id ? blog : response))
+    } catch (e) {
+      console.error('error updating like data', e)
+    }
+  }
+
 
   if (user === null) {
     return (
@@ -107,7 +126,7 @@ const App = () => {
       </Toggalge>
 
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
       )}
     </div>
   )
