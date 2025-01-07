@@ -98,7 +98,7 @@ const App = () => {
 
   const deleteBlog = async (id, blogData) => {
     try {
-      const response = await blogService.remove(id)
+      await blogService.remove(id)
 
       setNotification({
         message: `'${blogData.title}' by ${blogData.author} was removed from the records.`,
