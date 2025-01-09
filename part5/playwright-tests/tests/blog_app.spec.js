@@ -75,7 +75,7 @@ describe('Blog app', () => {
       await expect(page.getByText('added like to \'Test Blog\' by Test User.')).toBeVisible()
     })
 
-    test.only('a user can delete a blog', async ({ page }) => {
+    test('a user can delete a blog', async ({ page }) => {
       await page.getByRole('button', { name: 'create new blog' }).click()
 
       await page.getByRole('textbox').first().fill('Test Blog')
