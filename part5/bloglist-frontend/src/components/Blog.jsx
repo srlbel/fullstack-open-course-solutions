@@ -45,7 +45,7 @@ const ToggableBlog = ({ title, author, url, likes, id, updateBlog, deleteBlog })
         <button onClick={toggleVisibility}>view</button>
       </p>
 
-      <div style={showWhenVisible}>
+      <div style={showWhenVisible} className='toggableContent'>
         <p>{url}</p>
         <p>
           likes {likes}
