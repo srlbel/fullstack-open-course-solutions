@@ -45,4 +45,26 @@ describe('<Blog />', () => {
     expect(likes.parentElement).toHaveStyle('display: block')
   })
 
+  test('calls the event handler twice when button is clicked twice', async () => {
+    const blog = {
+      title: 'Blog Test',
+      author: 'Author Test',
+      likes: 10,
+      url: 'http://url.com'
+    }
+
+    const mockHandler = vi.fn()
+
+    render(<Blog blog={blog} updateBlog={mockHandler} />)
+    const user = userEvent.setup()
+    const viewButton = screen.getByText('view')
+    await user.click(viewButton)
+
+    const likeButton = screen.getByText('like')
+    await user.click(likeButton)
+    await user.click(likeButton)
+
+    expect(mockHandler.mock.calls).toHaveLength(2)
+  })
+
 })
