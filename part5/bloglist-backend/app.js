@@ -12,11 +12,6 @@ const logger = require('./utils/logger')
 const blogRoutes = require('./controllers/blogs')
 const usersRoutes = require('./controllers/users')
 const loginRoutes = require('./controllers/login')
-if (process.env.NODE_ENV === 'test') {
-  const testingRouter = require('./controllers/testing')
-  app.use('/api/testing', testingRouter)
-}
-
 const middleware = require('./utils/middleware')
 
 const app = express()
@@ -38,6 +33,12 @@ app.use(middleware.tokenExtractor)
 app.use('/api/blogs', middleware.userExtractor, blogRoutes)
 app.use('/api/users', usersRoutes)
 app.use('/api/login', loginRoutes)
+if (process.env.NODE_ENV === 'test') {
+  const testingRouter = require('./controllers/testing')
+  app.use('/api/testing', testingRouter)
+}
+
+
 
 app.use(middleware.errorHandler)
 app.use(middleware.unknownEndpoint)
