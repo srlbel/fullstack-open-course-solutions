@@ -25,6 +25,7 @@ const BlogForm = ({ createBlog }) => {
           type='text'
           value={title}
           name='title'
+          placeholder='title'
           onChange={event => setTitle(event.target.value)}
         />
       </div>
@@ -34,6 +35,7 @@ const BlogForm = ({ createBlog }) => {
           type='text'
           value={url}
           name='url'
+          placeholder='url'
           onChange={event => setUrl(event.target.value)}
         />
       </div>
