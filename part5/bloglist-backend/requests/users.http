@@ -1,0 +1,13 @@
+### Post a user
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "test",
+  "name": "test",
+  "password": "a password"
+}
+
+
+### Get all users
+GET http://localhost:3001/api/users
