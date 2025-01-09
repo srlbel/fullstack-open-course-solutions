@@ -5,5 +5,9 @@ describe('Blog app', () => {
     await page.goto('http://localhost:5173')
   })
 
-  test('front page can be openeded', async ({ page }) => { })
+  test('Login form is shown', async ({ page }) => {
+    await page.getByRole('button', { name: 'log in' }).click()
+
+    await expect(page.locator('#login-form')).toBeVisible();
+  })
 })
