@@ -75,5 +75,24 @@ describe('Blog app', () => {
       await expect(page.getByText('added like to \'Test Blog\' by Test User.')).toBeVisible()
     })
 
+    test.only('a user can delete a blog', async ({ page }) => {
+      await page.getByRole('button', { name: 'create new blog' }).click()
+
+      await page.getByRole('textbox').first().fill('Test Blog')
+      await page.getByRole('textbox').last().fill('http://testurl.com')
+      await page.getByRole('button', { name: 'post blog' }).click()
+
+      await page.getByRole('button', { name: 'view' }).click()
+
+      page.on('dialog', async (dialog) => {
+        expect(dialog.type()).toBe('confirm');
+        expect(dialog.message()).toBe('You are about to delete Test Blog by Test User. Continue?');
+        await dialog.accept();
+      });
+
+      await page.getByRole('button', { name: 'delete' }).click()
+
+      await expect(page.getByText('\'Test Blog\' by Test User was removed from the records.')).toBeVisible()
+    })
   })
 })
