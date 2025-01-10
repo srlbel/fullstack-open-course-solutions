@@ -113,6 +113,10 @@ describe('Blog app', () => {
       await page.getByRole('textbox').last().fill('http://testurl.com')
       await page.getByRole('button', { name: 'post blog' }).click()
 
+      // check user can see delete button
+      await page.getByRole('button', { name: 'view' }).click()
+      await expect(page.getByRole('button', { name: 'delete' })).toBeVisible()
+
       await page.getByRole('button', { name: 'log out' }).click()
 
       // log in with 'notOwner'
@@ -124,7 +128,7 @@ describe('Blog app', () => {
 
       // try deleting the blog
       await page.getByRole('button', { name: 'view' }).click()
-      expect(page.getByRole('button', { name: 'delete' })).toBeNull()
+      expect(page.getByRole('button', { name: 'delete' })).not.toBeVisible()
 
     })
   })

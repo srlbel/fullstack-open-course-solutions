@@ -2,11 +2,7 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 
 const ToggableBlog = ({ title, author, url, likes, id, updateBlog, deleteBlog, user }) => {
-  const [isOwner, setIsOwner] = useState(false);
-
-  if (user.name === author) {
-    setIsOwner(true)
-  }
+  const isOwner = user.name === author
 
   const blogStyle = {
     paddingLeft: 5,
