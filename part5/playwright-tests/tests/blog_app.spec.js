@@ -94,5 +94,38 @@ describe('Blog app', () => {
 
       await expect(page.getByText('\'Test Blog\' by Test User was removed from the records.')).toBeVisible()
     })
+
+    test('only the user who created the blog can use the delete button', async ({ page, request }) => {
+      const notOwner = {
+        username: 'notOwner',
+        name: 'not the owner',
+        password: 'notowner'
+      }
+
+      await request.post('http://localhost:5173/api/users', {
+        data: notOwner
+      })
+
+      // create blog with first user
+      await page.getByRole('button', { name: 'create new blog' }).click()
+
+      await page.getByRole('textbox').first().fill('Test Blog')
+      await page.getByRole('textbox').last().fill('http://testurl.com')
+      await page.getByRole('button', { name: 'post blog' }).click()
+
+      await page.getByRole('button', { name: 'log out' }).click()
+
+      // log in with 'notOwner'
+      await page.getByRole('button', { name: 'log in' }).click()
+
+      await page.getByRole('textbox').first().fill('notOwner')
+      await page.getByRole('textbox').last().fill('notowner')
+      await page.getByRole('button', { name: 'login' }).click()
+
+      // try deleting the blog
+      await page.getByRole('button', { name: 'view' }).click()
+      expect(page.getByRole('button', { name: 'delete' })).toBeNull()
+
+    })
   })
 })

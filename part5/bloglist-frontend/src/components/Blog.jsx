@@ -1,7 +1,13 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
 
-const ToggableBlog = ({ title, author, url, likes, id, updateBlog, deleteBlog }) => {
+const ToggableBlog = ({ title, author, url, likes, id, updateBlog, deleteBlog, user }) => {
+  const [isOwner, setIsOwner] = useState(false);
+
+  if (user.name === author) {
+    setIsOwner(true)
+  }
+
   const blogStyle = {
     paddingLeft: 5,
     border: 'solid',
@@ -52,13 +58,13 @@ const ToggableBlog = ({ title, author, url, likes, id, updateBlog, deleteBlog })
           <button onClick={updateLikes}>like</button>
         </p>
         <p>{author}</p>
-        <button onClick={removeBlog}>delete</button>
+        {isOwner && <button onClick={removeBlog}>delete</button>}
       </div>
     </div>
   )
 }
 
-const Blog = ({ blog, updateBlog, deleteBlog }) => (
+const Blog = ({ blog, updateBlog, deleteBlog, user }) => (
   <ToggableBlog
     title={blog.title}
     id={blog.id}
@@ -67,6 +73,7 @@ const Blog = ({ blog, updateBlog, deleteBlog }) => (
     likes={blog.likes}
     updateBlog={updateBlog}
     deleteBlog={deleteBlog}
+    user={user}
   />
 )
 
@@ -77,7 +84,8 @@ ToggableBlog.propTypes = {
   url: PropTypes.string.isRequired,
   likes: PropTypes.number.isRequired,
   updateBlog: PropTypes.func.isRequired,
-  deleteBlog: PropTypes.func.isRequired
+  deleteBlog: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired
 }
 
 
