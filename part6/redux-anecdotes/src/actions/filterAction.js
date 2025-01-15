@@ -1,6 +1,6 @@
 export const filterChange = (filter) => {
   return {
-    type: 'SET_FILTER',
+    type: 'filter/setFilter',
     payload: { filter }
   }
 }

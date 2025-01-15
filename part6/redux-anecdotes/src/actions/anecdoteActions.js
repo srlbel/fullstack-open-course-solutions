@@ -1,9 +1,9 @@
 export const voteAnecdote = (id) => ({
-  type: 'VOTE_ANECDOTE',
+  type: 'anecdotes/voteAnecdote',
   payload: { id }
 })
 
 export const newAnecdote = (content) => ({
-  type: 'NEW_ANECDOTE',
+  type: 'anecdotes/createAnecdote',
   payload: { content }
 })
