@@ -6,7 +6,6 @@ const AnecdoteList = () => {
     if (filter === 'ALL') return anecdote
 
     return anecdote.filter(anecdote => anecdote.content.includes(filter))
-
   })
 
   const dispatch = useDispatch()
