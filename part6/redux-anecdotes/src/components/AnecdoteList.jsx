@@ -4,7 +4,7 @@ import { setNotification, clearNotification } from '../reducers/notificationRedu
 
 const AnecdoteList = () => {
   const anecdotes = useSelector(({ filter, anecdote }) => {
-    if (filter === 'ALL') return anecdote
+    if (filter === '') return anecdote
 
     return anecdote.filter(anecdote => anecdote.content.toLowerCase().includes(filter.toLowerCase()))
   })
