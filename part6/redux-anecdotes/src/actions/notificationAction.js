@@ -1,7 +1,7 @@
 export const setNotification = (notification) => {
   return {
     type: 'notification/setNotification',
-    payload: { notification }
+    payload: notification
   }
 }
 
