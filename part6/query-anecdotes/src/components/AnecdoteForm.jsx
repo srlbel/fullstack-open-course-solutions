@@ -8,8 +8,12 @@ const AnecdoteForm = () => {
 
   const newAnecdoteMutation = useMutation({
     mutationFn: createAnecdote,
-    onSuccess: () => {
+    onSuccess: (newAnecdote) => {
       queryClient.invalidateQueries({ queryKey: ['anecdotes'] })
+      setNotification(`Created '${newAnecdote.content}'`)
+    },
+    onError: () => {
+      setNotification('too short anecdote, must have length of 5 or more characters')
     }
   })
 
@@ -18,7 +22,6 @@ const AnecdoteForm = () => {
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
     newAnecdoteMutation.mutate({ content, votes: 0 })
-    setNotification(`Created '${content}'`)
   }
 
   return (
