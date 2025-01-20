@@ -26,7 +26,7 @@ loginRouter.post('/', async (request, response) => {
     userForToken,
     process.env.JWT_SECRET,
     {
-      expiresIn: 60 * 60
+      expiresIn: 60 * 180
     }
   )
 
