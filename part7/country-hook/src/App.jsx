@@ -18,7 +18,32 @@ const useField = (type) => {
 const useCountry = (name) => {
   const [country, setCountry] = useState(null)
 
-  useEffect(() => {})
+  useEffect(() => {
+    if (!name) {
+      setCountry(null)
+      return
+    }
+
+    const fetchCountry = async () => {
+      try {
+        const response = await axios.get(`https://studies.cs.helsinki.fi/restcountries/api/name/${name}`)
+        const data = response.data
+        setCountry({
+          found: true,
+          data: {
+            name: data.name.common,
+            capital: data.capital[0],
+            population: data.population,
+            flag: data.flags.png,
+          },
+        })
+      } catch (e) {
+        setCountry({ found: false })
+      }
+    }
+
+    fetchCountry()
+  }, [name])
 
   return country
 }
@@ -40,20 +65,18 @@ const Country = ({ country }) => {
     <div>
       <h3>{country.data.name} </h3>
       <div>capital {country.data.capital} </div>
-      <div>population {country.data.population}</div> 
-      <img src={country.data.flag} height='100' alt={`flag of ${country.data.name}`}/>  
+      <div>population {country.data.population}</div>
+      <img src={country.data.flag} height='100' alt={`flag of ${country.data.name}`} />
     </div>
   )
 }
 
 const App = () => {
   const nameInput = useField('text')
-  const [name, setName] = useState('')
-  const country = useCountry(name)
+  const country = useCountry(nameInput.value)
 
   const fetch = (e) => {
     e.preventDefault()
-    setName(nameInput.value)
   }
 
   return (
