@@ -7,19 +7,19 @@ import Notification from './components/Notification'
 import Toggalge from './components/Toggable'
 import blogService from './services/blogs'
 import loginService from './services/login'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 const App = () => {
   const dispatch = useDispatch()
-  const [blogs, setBlogs] = useState([])
+  const blogs = useSelector(state => state.blogs)
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs))
-  }, [])
+    blogService.getAll().then((blogs) => dispatch({ type: 'SET_BLOGS', payload: blogs }))
+  }, [dispatch])
 
   useEffect(() => {
     const loggedUser = window.localStorage.getItem('loggedUser')
@@ -46,7 +46,10 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (e) {
-      dispatch({ type: 'SET_NOTIFICATION', payload: { message: e.response.data.error, type: 'error' } })
+      dispatch({
+        type: 'SET_NOTIFICATION',
+        payload: { message: e.response.data.error, type: 'error' },
+      })
       setTimeout(() => {
         dispatch({ type: 'CLEAR_NOTIFICATION' })
       }, 5000)
@@ -68,13 +71,13 @@ const App = () => {
         payload: {
           message: `a new blog '${response.title}' by ${response.author} added`,
           type: 'success',
-        }
+        },
       })
       setTimeout(() => {
         dispatch({ type: 'CLEAR_NOTIFICATION' })
       }, 5000)
 
-      setBlogs([...blogs, response])
+      dispatch({ type: 'ADD_BLOG', payload: response })
     } catch (e) {
       console.error('error handling input data', e)
     }
@@ -89,7 +92,7 @@ const App = () => {
         payload: {
           message: `added like to '${response.title}' by ${response.author}.`,
           type: 'success',
-        }
+        },
       })
 
       setTimeout(() => {
@@ -112,7 +115,7 @@ const App = () => {
           payload: {
             message: "Can't delete data that it's not own by the user",
             type: 'error',
-          }
+          },
         })
 
         setTimeout(() => {
@@ -129,7 +132,7 @@ const App = () => {
         payload: {
           message: `'${blogData.title}' by ${blogData.author} was removed from the records.`,
           type: 'success',
-        }
+        },
       })
 
       setTimeout(() => {
