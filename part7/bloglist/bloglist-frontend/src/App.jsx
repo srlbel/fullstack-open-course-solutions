@@ -17,9 +17,7 @@ const App = () => {
   const [user, setUser] = useState(null)
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs(blogs)
-    )
+    blogService.getAll().then((blogs) => setBlogs(blogs))
   }, [])
 
   useEffect(() => {
@@ -37,7 +35,8 @@ const App = () => {
 
     try {
       const user = await loginService.login({
-        username, password
+        username,
+        password,
       })
       setUser(user)
       blogService.setToken(user.token)
@@ -65,7 +64,7 @@ const App = () => {
 
       setNotification({
         message: `a new blog '${response.title}' by ${response.author} added`,
-        type: 'success'
+        type: 'success',
       })
       setTimeout(() => {
         setNotification(null)
@@ -83,14 +82,16 @@ const App = () => {
 
       setNotification({
         message: `added like to '${response.title}' by ${response.author}.`,
-        type: 'success'
+        type: 'success',
       })
 
       setTimeout(() => {
         setNotification(null)
       }, 5000)
 
-      setBlogs(blogs.map(blog => blog.id !== blogObject.id ? blog : response))
+      setBlogs(
+        blogs.map((blog) => (blog.id !== blogObject.id ? blog : response))
+      )
     } catch (e) {
       console.error('error updating like data', e)
     }
@@ -98,11 +99,10 @@ const App = () => {
 
   const deleteBlog = async (id, blogData) => {
     try {
-
       if (user.name !== blogData.author) {
         setNotification({
-          message: 'Can\'t delete data that it\'s not own by the user',
-          type: 'error'
+          message: "Can't delete data that it's not own by the user",
+          type: 'error',
         })
 
         setTimeout(() => {
@@ -116,14 +116,14 @@ const App = () => {
 
       setNotification({
         message: `'${blogData.title}' by ${blogData.author} was removed from the records.`,
-        type: 'success'
+        type: 'success',
       })
 
       setTimeout(() => {
         setNotification(null)
       }, 5000)
 
-      setBlogs(blogs.filter(blog => blog.id !== id))
+      setBlogs(blogs.filter((blog) => blog.id !== id))
     } catch (e) {
       console.error('error deleting data', e)
     }
@@ -133,8 +133,13 @@ const App = () => {
     return (
       <div>
         <h2>log in</h2>
-        <Toggalge buttonLabel="log in">
-          {notification && <Notification message={notification.message} type={notification.type} />}
+        <Toggalge buttonLabel='log in'>
+          {notification && (
+            <Notification
+              message={notification.message}
+              type={notification.type}
+            />
+          )}
           <LoginForm
             handleLogin={handleLogin}
             username={username}
@@ -150,8 +155,14 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      {notification && <Notification message={notification.message} type={notification.type} />}
-      <p> {user.name} logged in. <button onClick={() => handleLogout()}>log out</button></p>
+      {notification && (
+        <Notification message={notification.message} type={notification.type} />
+      )}
+      <p>
+        {' '}
+        {user.name} logged in.{' '}
+        <button onClick={() => handleLogout()}>log out</button>
+      </p>
 
       <Toggalge buttonLabel='create new blog'>
         <BlogForm createBlog={createBlog} />
@@ -160,9 +171,15 @@ const App = () => {
       {blogs
         .slice()
         .sort((a, b) => b.likes - a.likes)
-        .map(blog =>
-          <Blog key={blog.id} blog={blog} updateBlog={updateBlog} deleteBlog={deleteBlog} user={user} />
-        )}
+        .map((blog) => (
+          <Blog
+            key={blog.id}
+            blog={blog}
+            updateBlog={updateBlog}
+            deleteBlog={deleteBlog}
+            user={user}
+          />
+        ))}
     </div>
   )
 }

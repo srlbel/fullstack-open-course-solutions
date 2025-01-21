@@ -10,7 +10,7 @@ const BlogForm = ({ createBlog }) => {
 
     createBlog({
       title,
-      url
+      url,
     })
 
     setTitle('')
@@ -26,7 +26,7 @@ const BlogForm = ({ createBlog }) => {
           value={title}
           name='title'
           placeholder='title'
-          onChange={event => setTitle(event.target.value)}
+          onChange={(event) => setTitle(event.target.value)}
         />
       </div>
       <div>
@@ -36,16 +36,16 @@ const BlogForm = ({ createBlog }) => {
           value={url}
           name='url'
           placeholder='url'
-          onChange={event => setUrl(event.target.value)}
+          onChange={(event) => setUrl(event.target.value)}
         />
       </div>
-      <button type="submit">post blog</button>
+      <button type='submit'>post blog</button>
     </form>
   )
 }
 
 BlogForm.propTypes = {
-  createBlog: PropTypes.func.isRequired
+  createBlog: PropTypes.func.isRequired,
 }
 
 export default BlogForm
