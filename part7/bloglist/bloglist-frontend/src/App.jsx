@@ -8,6 +8,7 @@ import Toggalge from './components/Toggable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { useDispatch, useSelector } from 'react-redux'
+import { likeBlog, deleteBlog } from './reducers/blogsReducer'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -84,65 +85,35 @@ const App = () => {
   }
 
   const updateBlog = async (id, blogObject) => {
-    try {
-      const response = await blogService.update(id, blogObject)
+    dispatch(likeBlog(id, blogObject))
 
-      dispatch({
-        type: 'SET_NOTIFICATION',
-        payload: {
-          message: `added like to '${response.title}' by ${response.author}.`,
-          type: 'success',
-        },
-      })
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      payload: {
+        message: `added like to '${blogObject.title}' by ${blogObject.author}.`,
+        type: 'success',
+      },
+    })
 
-      setTimeout(() => {
-        dispatch({ type: 'CLEAR_NOTIFICATION' })
-      }, 5000)
-
-      setBlogs(
-        blogs.map((blog) => (blog.id !== blogObject.id ? blog : response))
-      )
-    } catch (e) {
-      console.error('error updating like data', e)
-    }
+    setTimeout(() => {
+      dispatch({ type: 'CLEAR_NOTIFICATION' })
+    }, 5000)
   }
 
-  const deleteBlog = async (id, blogData) => {
-    try {
-      if (user.name !== blogData.author) {
-        dispatch({
-          type: 'SET_NOTIFICATION',
-          payload: {
-            message: "Can't delete data that it's not own by the user",
-            type: 'error',
-          },
-        })
+  const removeBlog = (id, blogData) => {
+    dispatch(deleteBlog(id))
 
-        setTimeout(() => {
-          dispatch({ type: 'CLEAR_NOTIFICATION' })
-        }, 5000)
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      payload: {
+        message: `'${blogData.title}' by ${blogData.author} was removed from the records.`,
+        type: 'success',
+      },
+    })
 
-        return
-      }
-
-      await blogService.remove(id)
-
-      dispatch({
-        type: 'SET_NOTIFICATION',
-        payload: {
-          message: `'${blogData.title}' by ${blogData.author} was removed from the records.`,
-          type: 'success',
-        },
-      })
-
-      setTimeout(() => {
-        dispatch({ type: 'CLEAR_NOTIFICATION' })
-      }, 5000)
-
-      setBlogs(blogs.filter((blog) => blog.id !== id))
-    } catch (e) {
-      console.error('error deleting data', e)
-    }
+    setTimeout(() => {
+      dispatch({ type: 'CLEAR_NOTIFICATION' })
+    }, 5000)
   }
 
   if (user === null) {
@@ -185,7 +156,7 @@ const App = () => {
             key={blog.id}
             blog={blog}
             updateBlog={updateBlog}
-            deleteBlog={deleteBlog}
+            deleteBlog={removeBlog}
             user={user}
           />
         ))}
