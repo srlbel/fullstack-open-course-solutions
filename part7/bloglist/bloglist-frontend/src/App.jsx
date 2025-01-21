@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import './styles/notification.css'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
@@ -6,9 +6,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom'
 import Blogs from './views/Blogs'
 import Login from './views/Login'
+import Users from './views/Users'
 
 const App = () => {
   const dispatch = useDispatch()
+
+  const [loading, setLoading] = useState(true)
   const user = useSelector(state => state.user)
   const notification = useSelector(state => state.notification)
 
@@ -25,7 +28,11 @@ const App = () => {
       dispatch({ type: 'SET_USER', payload: user })
       blogService.setToken(user.token)
     }
+    setLoading(false)
   }, [dispatch])
+
+
+  if (loading) return <p> Loading...</p>
 
   return (
     <Router>
@@ -33,6 +40,7 @@ const App = () => {
         {notification && <Notification />}
         <Routes>
           <Route path='/' element={user ? <Blogs /> : <Navigate replace to='/login' />} />
+          <Route path='/users' element={user ? <Users /> : <Navigate replace to='/login' />} />
           <Route path='/login' element={<Login />} />
         </Routes>
       </div>
