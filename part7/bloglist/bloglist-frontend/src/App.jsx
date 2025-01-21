@@ -8,6 +8,7 @@ import Blogs from './views/Blogs'
 import Login from './views/Login'
 import Users from './views/Users'
 import UserDetail from './views/UserDetail'
+import BlogDetails from './views/BlogDetails'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -15,8 +16,6 @@ const App = () => {
   const [loading, setLoading] = useState(true)
   const user = useSelector(state => state.user)
   const notification = useSelector(state => state.notification)
-
-  console.log(user)
 
   useEffect(() => {
     blogService.getAll().then((blogs) => dispatch({ type: 'SET_BLOGS', payload: blogs }))
@@ -41,6 +40,7 @@ const App = () => {
         {notification && <Notification />}
         <Routes>
           <Route path='/' element={user ? <Blogs /> : <Navigate replace to='/login' />} />
+          <Route path='/blogs/:id' element={user ? <BlogDetails /> : <Navigate replace to='/login' />} />
           <Route path='/users' element={user ? <Users /> : <Navigate replace to='/login' />} />
           <Route path='/users/:id' element={user ? <UserDetail /> : <Navigate replace to='/login' />} />
           <Route path='/login' element={<Login />} />

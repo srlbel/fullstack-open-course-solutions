@@ -7,6 +7,13 @@ blogRoutes.get('/', async (request, response) => {
   response.status(200).json(blogs)
 })
 
+blogRoutes.get('/:id', async (request, response) => {
+  const { id } = request.params
+  const blog = await Blog.findById(id).populate('user', { username: 1, name: 1 })
+
+  response.json(blog)
+})
+
 blogRoutes.post('/', async (request, response) => {
   const body = request.body
   const user = request.user

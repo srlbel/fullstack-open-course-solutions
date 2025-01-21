@@ -1,9 +1,8 @@
-import Blog from '../components/Blog'
 import BlogForm from '../components/BlogForm'
 import Toggalge from '../components/Toggable'
 import blogService from '../services/blogs'
-import { likeBlog, deleteBlog } from '../reducers/blogsReducer'
 import { useSelector, useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 const Blogs = () => {
   const dispatch = useDispatch()
@@ -37,38 +36,6 @@ const Blogs = () => {
     }
   }
 
-  const updateBlog = async (id, blogObject) => {
-    dispatch(likeBlog(id, blogObject))
-
-    dispatch({
-      type: 'SET_NOTIFICATION',
-      payload: {
-        message: `added like to '${blogObject.title}' by ${blogObject.author}.`,
-        type: 'success',
-      },
-    })
-
-    setTimeout(() => {
-      dispatch({ type: 'CLEAR_NOTIFICATION' })
-    }, 5000)
-  }
-
-  const removeBlog = (id, blogData) => {
-    dispatch(deleteBlog(id))
-
-    dispatch({
-      type: 'SET_NOTIFICATION',
-      payload: {
-        message: `'${blogData.title}' by ${blogData.author} was removed from the records.`,
-        type: 'success',
-      },
-    })
-
-    setTimeout(() => {
-      dispatch({ type: 'CLEAR_NOTIFICATION' })
-    }, 5000)
-  }
-
   return (
     <div>
       <h2>blogs</h2>
@@ -85,13 +52,11 @@ const Blogs = () => {
         .slice()
         .sort((a, b) => b.likes - a.likes)
         .map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            updateBlog={updateBlog}
-            deleteBlog={removeBlog}
-            user={user}
-          />
+          <p key={blog.id}>
+            <Link
+              to={`/blogs/${blog.id}`}
+            >{blog.title} - {blog.author} </Link>
+          </p>
         ))}
     </div>
   )
