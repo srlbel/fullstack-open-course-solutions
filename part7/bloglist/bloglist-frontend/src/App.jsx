@@ -7,9 +7,10 @@ import Notification from './components/Notification'
 import Toggalge from './components/Toggable'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import { useDispatch } from 'react-redux'
 
 const App = () => {
-  const [notification, setNotification] = useState(null)
+  const dispatch = useDispatch()
   const [blogs, setBlogs] = useState([])
 
   const [username, setUsername] = useState('')
@@ -45,9 +46,9 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (e) {
-      setNotification({ message: e.response.data.error, type: 'error' })
+      dispatch({ type: 'SET_NOTIFICATION', payload: { message: e.response.data.error, type: 'error' } })
       setTimeout(() => {
-        setNotification(null)
+        dispatch({ type: 'CLEAR_NOTIFICATION' })
       }, 5000)
     }
   }
@@ -62,12 +63,15 @@ const App = () => {
     try {
       const response = await blogService.create(blogObject)
 
-      setNotification({
-        message: `a new blog '${response.title}' by ${response.author} added`,
-        type: 'success',
+      dispatch({
+        type: 'SET_NOTIFICATION',
+        payload: {
+          message: `a new blog '${response.title}' by ${response.author} added`,
+          type: 'success',
+        }
       })
       setTimeout(() => {
-        setNotification(null)
+        dispatch({ type: 'CLEAR_NOTIFICATION' })
       }, 5000)
 
       setBlogs([...blogs, response])
@@ -80,13 +84,16 @@ const App = () => {
     try {
       const response = await blogService.update(id, blogObject)
 
-      setNotification({
-        message: `added like to '${response.title}' by ${response.author}.`,
-        type: 'success',
+      dispatch({
+        type: 'SET_NOTIFICATION',
+        payload: {
+          message: `added like to '${response.title}' by ${response.author}.`,
+          type: 'success',
+        }
       })
 
       setTimeout(() => {
-        setNotification(null)
+        dispatch({ type: 'CLEAR_NOTIFICATION' })
       }, 5000)
 
       setBlogs(
@@ -100,13 +107,16 @@ const App = () => {
   const deleteBlog = async (id, blogData) => {
     try {
       if (user.name !== blogData.author) {
-        setNotification({
-          message: "Can't delete data that it's not own by the user",
-          type: 'error',
+        dispatch({
+          type: 'SET_NOTIFICATION',
+          payload: {
+            message: "Can't delete data that it's not own by the user",
+            type: 'error',
+          }
         })
 
         setTimeout(() => {
-          setNotification(null)
+          dispatch({ type: 'CLEAR_NOTIFICATION' })
         }, 5000)
 
         return
@@ -114,13 +124,16 @@ const App = () => {
 
       await blogService.remove(id)
 
-      setNotification({
-        message: `'${blogData.title}' by ${blogData.author} was removed from the records.`,
-        type: 'success',
+      dispatch({
+        type: 'SET_NOTIFICATION',
+        payload: {
+          message: `'${blogData.title}' by ${blogData.author} was removed from the records.`,
+          type: 'success',
+        }
       })
 
       setTimeout(() => {
-        setNotification(null)
+        dispatch({ type: 'CLEAR_NOTIFICATION' })
       }, 5000)
 
       setBlogs(blogs.filter((blog) => blog.id !== id))
@@ -134,12 +147,7 @@ const App = () => {
       <div>
         <h2>log in</h2>
         <Toggalge buttonLabel='log in'>
-          {notification && (
-            <Notification
-              message={notification.message}
-              type={notification.type}
-            />
-          )}
+          <Notification />
           <LoginForm
             handleLogin={handleLogin}
             username={username}
@@ -155,9 +163,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      {notification && (
-        <Notification message={notification.message} type={notification.type} />
-      )}
+      <Notification />
       <p>
         {' '}
         {user.name} logged in.{' '}
