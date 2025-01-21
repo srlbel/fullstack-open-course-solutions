@@ -1,8 +1,4 @@
-const initialState = {
-  name: null,
-  token: null,
-  username: null
-}
+const initialState = null
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
