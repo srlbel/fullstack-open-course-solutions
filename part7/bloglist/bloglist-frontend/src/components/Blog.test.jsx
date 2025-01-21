@@ -8,7 +8,7 @@ describe('<Blog />', () => {
       title: 'Blog Test',
       author: 'Author Test',
       likes: 10,
-      url: 'http://url.com'
+      url: 'http://url.com',
     }
 
     render(<Blog blog={blog} />)
@@ -27,7 +27,7 @@ describe('<Blog />', () => {
       title: 'Blog Test',
       author: 'Author Test',
       likes: 10,
-      url: 'http://url.com'
+      url: 'http://url.com',
     }
 
     render(<Blog blog={blog} />)
@@ -49,7 +49,7 @@ describe('<Blog />', () => {
       title: 'Blog Test',
       author: 'Author Test',
       likes: 10,
-      url: 'http://url.com'
+      url: 'http://url.com',
     }
 
     const mockHandler = vi.fn()
@@ -65,5 +65,4 @@ describe('<Blog />', () => {
 
     expect(mockHandler.mock.calls).toHaveLength(2)
   })
-
 })

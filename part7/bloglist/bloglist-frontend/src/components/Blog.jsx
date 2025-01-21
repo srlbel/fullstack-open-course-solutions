@@ -1,7 +1,16 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
 
-const ToggableBlog = ({ title, author, url, likes, id, updateBlog, deleteBlog, user }) => {
+const ToggableBlog = ({
+  title,
+  author,
+  url,
+  likes,
+  id,
+  updateBlog,
+  deleteBlog,
+  user,
+}) => {
   const isOwner = user.name === author
 
   const blogStyle = {
@@ -27,7 +36,9 @@ const ToggableBlog = ({ title, author, url, likes, id, updateBlog, deleteBlog, u
   const removeBlog = () => {
     const blogToDelete = id
 
-    const isAccepted = window.confirm(`You are about to delete ${title} by ${author}. Continue?`)
+    const isAccepted = window.confirm(
+      `You are about to delete ${title} by ${author}. Continue?`
+    )
 
     if (isAccepted) deleteBlog(blogToDelete, { title, author })
   }
@@ -81,9 +92,7 @@ ToggableBlog.propTypes = {
   likes: PropTypes.number.isRequired,
   updateBlog: PropTypes.func.isRequired,
   deleteBlog: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
 }
-
-
 
 export default Blog

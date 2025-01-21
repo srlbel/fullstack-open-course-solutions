@@ -7,20 +7,20 @@ import Notification from './components/Notification'
 import Toggalge from './components/Toggable'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import { useDispatch, useSelector } from 'react-redux'
+import { likeBlog, deleteBlog } from './reducers/blogsReducer'
 
 const App = () => {
-  const [notification, setNotification] = useState(null)
-  const [blogs, setBlogs] = useState([])
+  const dispatch = useDispatch()
+  const blogs = useSelector(state => state.blogs)
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs(blogs)
-    )
-  }, [])
+    blogService.getAll().then((blogs) => dispatch({ type: 'SET_BLOGS', payload: blogs }))
+  }, [dispatch])
 
   useEffect(() => {
     const loggedUser = window.localStorage.getItem('loggedUser')
@@ -37,7 +37,8 @@ const App = () => {
 
     try {
       const user = await loginService.login({
-        username, password
+        username,
+        password,
       })
       setUser(user)
       blogService.setToken(user.token)
@@ -46,9 +47,12 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (e) {
-      setNotification({ message: e.response.data.error, type: 'error' })
+      dispatch({
+        type: 'SET_NOTIFICATION',
+        payload: { message: e.response.data.error, type: 'error' },
+      })
       setTimeout(() => {
-        setNotification(null)
+        dispatch({ type: 'CLEAR_NOTIFICATION' })
       }, 5000)
     }
   }
@@ -63,78 +67,61 @@ const App = () => {
     try {
       const response = await blogService.create(blogObject)
 
-      setNotification({
-        message: `a new blog '${response.title}' by ${response.author} added`,
-        type: 'success'
+      dispatch({
+        type: 'SET_NOTIFICATION',
+        payload: {
+          message: `a new blog '${response.title}' by ${response.author} added`,
+          type: 'success',
+        },
       })
       setTimeout(() => {
-        setNotification(null)
+        dispatch({ type: 'CLEAR_NOTIFICATION' })
       }, 5000)
 
-      setBlogs([...blogs, response])
+      dispatch({ type: 'ADD_BLOG', payload: response })
     } catch (e) {
       console.error('error handling input data', e)
     }
   }
 
   const updateBlog = async (id, blogObject) => {
-    try {
-      const response = await blogService.update(id, blogObject)
+    dispatch(likeBlog(id, blogObject))
 
-      setNotification({
-        message: `added like to '${response.title}' by ${response.author}.`,
-        type: 'success'
-      })
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      payload: {
+        message: `added like to '${blogObject.title}' by ${blogObject.author}.`,
+        type: 'success',
+      },
+    })
 
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
-
-      setBlogs(blogs.map(blog => blog.id !== blogObject.id ? blog : response))
-    } catch (e) {
-      console.error('error updating like data', e)
-    }
+    setTimeout(() => {
+      dispatch({ type: 'CLEAR_NOTIFICATION' })
+    }, 5000)
   }
 
-  const deleteBlog = async (id, blogData) => {
-    try {
+  const removeBlog = (id, blogData) => {
+    dispatch(deleteBlog(id))
 
-      if (user.name !== blogData.author) {
-        setNotification({
-          message: 'Can\'t delete data that it\'s not own by the user',
-          type: 'error'
-        })
-
-        setTimeout(() => {
-          setNotification(null)
-        }, 5000)
-
-        return
-      }
-
-      await blogService.remove(id)
-
-      setNotification({
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      payload: {
         message: `'${blogData.title}' by ${blogData.author} was removed from the records.`,
-        type: 'success'
-      })
+        type: 'success',
+      },
+    })
 
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
-
-      setBlogs(blogs.filter(blog => blog.id !== id))
-    } catch (e) {
-      console.error('error deleting data', e)
-    }
+    setTimeout(() => {
+      dispatch({ type: 'CLEAR_NOTIFICATION' })
+    }, 5000)
   }
 
   if (user === null) {
     return (
       <div>
         <h2>log in</h2>
-        <Toggalge buttonLabel="log in">
-          {notification && <Notification message={notification.message} type={notification.type} />}
+        <Toggalge buttonLabel='log in'>
+          <Notification />
           <LoginForm
             handleLogin={handleLogin}
             username={username}
@@ -150,8 +137,12 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      {notification && <Notification message={notification.message} type={notification.type} />}
-      <p> {user.name} logged in. <button onClick={() => handleLogout()}>log out</button></p>
+      <Notification />
+      <p>
+        {' '}
+        {user.name} logged in.{' '}
+        <button onClick={() => handleLogout()}>log out</button>
+      </p>
 
       <Toggalge buttonLabel='create new blog'>
         <BlogForm createBlog={createBlog} />
@@ -160,9 +151,15 @@ const App = () => {
       {blogs
         .slice()
         .sort((a, b) => b.likes - a.likes)
-        .map(blog =>
-          <Blog key={blog.id} blog={blog} updateBlog={updateBlog} deleteBlog={deleteBlog} user={user} />
-        )}
+        .map((blog) => (
+          <Blog
+            key={blog.id}
+            blog={blog}
+            updateBlog={updateBlog}
+            deleteBlog={removeBlog}
+            user={user}
+          />
+        ))}
     </div>
   )
 }

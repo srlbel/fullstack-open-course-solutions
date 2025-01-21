@@ -20,7 +20,7 @@ describe('<BlogForm />', () => {
     expect(createBlog.mock.calls).toHaveLength(1)
     expect(createBlog.mock.calls[0][0]).toEqual({
       title: 'Testing Blog',
-      url: 'Testing Url'
+      url: 'Testing Url',
     })
   })
 })
