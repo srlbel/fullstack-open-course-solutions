@@ -3,8 +3,6 @@ import { useSelector } from 'react-redux'
 const Notification = () => {
   const notification = useSelector((state) => state.notification)
 
-  console.log(notification)
-
   if (!notification.type) return null
 
   if (notification.type === 'error') {

@@ -13,10 +13,10 @@ import { likeBlog, deleteBlog } from './reducers/blogsReducer'
 const App = () => {
   const dispatch = useDispatch()
   const blogs = useSelector(state => state.blogs)
+  const user = useSelector(state => state.user)
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then((blogs) => dispatch({ type: 'SET_BLOGS', payload: blogs }))
@@ -26,7 +26,7 @@ const App = () => {
     const loggedUser = window.localStorage.getItem('loggedUser')
     if (loggedUser) {
       const user = JSON.parse(loggedUser)
-      setUser(user)
+      dispatch({ type: 'SET_USER', payload: user })
       blogService.setToken(user.token)
     }
   }, [])
@@ -40,7 +40,7 @@ const App = () => {
         username,
         password,
       })
-      setUser(user)
+      dispatch({ type: 'SET_USER', payload: { user } })
       blogService.setToken(user.token)
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
 
@@ -58,7 +58,7 @@ const App = () => {
   }
 
   const handleLogout = () => {
-    setUser(null)
+    dispatch({ type: 'CLEAR_USER' })
     blogService.setToken(null)
     window.localStorage.removeItem('loggedUser')
   }
@@ -139,8 +139,7 @@ const App = () => {
       <h2>blogs</h2>
       <Notification />
       <p>
-        {' '}
-        {user.name} logged in.{' '}
+        {user.name} logged in.
         <button onClick={() => handleLogout()}>log out</button>
       </p>
 
