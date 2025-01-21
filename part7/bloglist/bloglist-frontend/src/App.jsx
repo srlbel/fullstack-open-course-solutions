@@ -9,6 +9,7 @@ import Login from './views/Login'
 import Users from './views/Users'
 import UserDetail from './views/UserDetail'
 import BlogDetails from './views/BlogDetails'
+import Navbar from './components/Navbar'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -37,6 +38,7 @@ const App = () => {
   return (
     <Router>
       <div>
+        <Navbar />
         {notification && <Notification />}
         <Routes>
           <Route path='/' element={user ? <Blogs /> : <Navigate replace to='/login' />} />

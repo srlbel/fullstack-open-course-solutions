@@ -4,7 +4,6 @@ import userService from '../services/users'
 import { Link } from "react-router-dom"
 
 const Users = () => {
-  const user = useSelector(state => state.user)
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -26,12 +25,6 @@ const Users = () => {
 
   return (
     <>
-      <h1>blogs</h1>
-      <p>
-        {user.name} logged in.
-        <button onClick={() => handleLogout()}>log out</button>
-      </p>
-
       <h1>users</h1>
       <table>
         <thead>

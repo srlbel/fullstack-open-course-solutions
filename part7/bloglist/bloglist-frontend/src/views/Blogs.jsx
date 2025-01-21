@@ -9,12 +9,6 @@ const Blogs = () => {
   const blogs = useSelector(state => state.blogs)
   const user = useSelector(state => state.user)
 
-  const handleLogout = () => {
-    dispatch({ type: 'CLEAR_USER' })
-    blogService.setToken(null)
-    window.localStorage.removeItem('loggedUser')
-  }
-
   const createBlog = async (blogObject) => {
     try {
       const response = await blogService.create(blogObject)
@@ -38,11 +32,7 @@ const Blogs = () => {
 
   return (
     <div>
-      <h2>blogs</h2>
-      <p>
-        {user.name} logged in.
-        <button onClick={() => handleLogout()}>log out</button>
-      </p>
+      <h1>blogs</h1>
 
       <Toggalge buttonLabel='create new blog'>
         <BlogForm createBlog={createBlog} />
