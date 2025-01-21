@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import userService from '../services/users'
+import { Link } from "react-router-dom"
 
 const Users = () => {
   const user = useSelector(state => state.user)
@@ -11,7 +12,6 @@ const Users = () => {
     const fetchUsers = async () => {
       try {
         const response = await userService.getAll()
-        console.log(response)
         setUsers(response)
         setLoading(false)
       } catch (e) {
@@ -43,7 +43,7 @@ const Users = () => {
         <tbody>
           {users.map(user =>
             <tr key={user.id}>
-              <td>{user.name}</td>
+              <td><Link to={`/users/${user.id}`}>{user.name}</Link></td>
               <td>{user.blogs.length}</td>
             </tr>
           )}
