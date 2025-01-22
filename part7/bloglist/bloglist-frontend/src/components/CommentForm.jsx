@@ -10,14 +10,15 @@ const CommentForm = ({ onSubmit }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="join">
       <input
+        className="input input-bordered join-item input-sm"
         name='text'
         type='text'
         onChange={(e) => setComment(e.target.value)}
         value={comment}
       />
-      <button type='submit'>add comment</button>
+      <button className='btn join-item btn-sm' type='submit'>add comment</button>
     </form>
   )
 }

@@ -14,13 +14,22 @@ const Navbar = () => {
   }
 
   return (
-    <>
-      <div>
-        <Link to='/'>blogs</Link> {" "}
-        <Link to='/users'>users</Link>
-        {user && <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>}
+    <div className="navbar bg-base-200">
+      <div className="flex-1 space-x-2">
+        <Link to='/' className="btn">blogs</Link> {" "}
+        <Link to='/users' className="btn">users</Link>
       </div>
-    </>
+      {
+        user ?
+          <div className="flex space-x-2">
+            <p className="italic">{user.name} logged in</p>
+            <button onClick={handleLogout} className="btn btn-error">
+              logout
+            </button>
+          </div> :
+          <Link to='/login' className="btn">login</Link>
+      }
+    </div>
   )
 }
 

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { likeBlog, deleteBlog } from '../reducers/blogsReducer'
 import { useDispatch, useSelector } from "react-redux"
 import CommentForm from "../components/CommentForm"
+import LoadingScreen from "./LoadingScreen"
 
 const BlogDetails = () => {
   const { id } = useParams()
@@ -89,22 +90,34 @@ const BlogDetails = () => {
     }, 5000)
   }
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading) return <LoadingScreen />
 
   return (
-    <>
-      <h1>{blog.title}</h1>
-      <a href={blog.url}>{blog.url}</a>
-      <p>{blog.likes} likes <button onClick={() => updateBlog(id, blog)}> like </button></p>
-      <p>added by {blog.author}</p>
-      {isOwner && <button onClick={() => removeBlog(id, blog)}>delete</button>}
+    <div className="p-5 flex flex-col space-y-2 items-start">
+      <h1 className="text-2xl font-semibold">{blog.title}</h1>
+      <p className="text-sm">added by {blog.author}</p>
+      <a href={blog.url} className="link link-hover text-sm">{blog.url}</a>
+      <p>{blog.likes} likes <button className='btn btn-outline btn-primary btn-sm' onClick={() => updateBlog(id, blog)}> like </button></p>
+      {isOwner && <button className='btn btn-error btn-outline btn-sm' onClick={() => removeBlog(id, blog)}>delete</button>}
 
-      <h2>comments</h2>
+      <h2 className="text-xl font-semibold">comments</h2>
       <CommentForm onSubmit={addComment} />
-      <ul>
-        {blog.comments.map(comment => <li key={comment.id}>{comment.text}</li>)}
+
+      <ul className="timeline timeline-vertical timeline-compact">
+        {blog.comments.map((comment, i) => {
+          return (
+            <li key={comment.id}>
+              <hr />
+              <div className="timeline-middle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+              </div>
+              <div className="timeline-end timeline-box">{comment.text}</div>
+              <hr />
+            </li>
+          )
+        })}
       </ul>
-    </>
+    </div>
   )
 }
 

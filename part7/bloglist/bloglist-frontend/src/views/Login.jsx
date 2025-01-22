@@ -41,17 +41,15 @@ const Login = () => {
   const [password, setPassword] = useState('')
 
   return (
-    <div>
-      <h2>log in</h2>
-      <Toggalge buttonLabel='log in'>
-        <LoginForm
-          handleLogin={handleLogin}
-          username={username}
-          setUsername={setUsername}
-          password={password}
-          setPassword={setPassword}
-        />
-      </Toggalge>
+    <div className="p-5 flex flex-col space-y-2">
+      <h1 className="font-semibold text-2xl">log in</h1>
+      <LoginForm
+        handleLogin={handleLogin}
+        username={username}
+        setUsername={setUsername}
+        password={password}
+        setPassword={setPassword}
+      />
     </div>
   )
 }

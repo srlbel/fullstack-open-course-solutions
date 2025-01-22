@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import userServices from '../services/users'
+import LoadingScreen from "./LoadingScreen"
 
 const UserDetail = () => {
   const { id } = useParams()
@@ -23,16 +24,14 @@ const UserDetail = () => {
     fetchUser()
   }, [id])
 
-  if (loading) return <div>loading</div>
+  if (loading) return <LoadingScreen />
 
   return (
-    <>
-      <h1>{user.name}</h1>
-      <h2>added blogs</h2>
-      <ul>
-        {blogs.map(blog => <li key={blog.id}>{blog.title}</li>)}
-      </ul>
-    </>
+    <div className="flex flex-col p-5 space-y-2">
+      <h1 className="text-2xl font-semibold">{user.name}</h1>
+      <h2 className="text-sm">added blogs</h2>
+      {blogs.map(blog => <Link to={`/blogs/${blog.id}`} key={blog.id} className="btn justify-start text-left p-auto">{blog.title}</Link>)}
+    </div>
   )
 }
 

@@ -1,23 +1,10 @@
-import { useState } from 'react'
-
 const Togglable = (props) => {
-  const [visible, setVisible] = useState(false)
-
-  const hideWhenVisible = { display: visible ? 'none' : '' }
-  const showWhenVisible = { display: visible ? '' : 'none' }
-
-  const toggleVisibility = () => {
-    setVisible(!visible)
-  }
-
   return (
-    <div>
-      <div style={hideWhenVisible}>
-        <button onClick={toggleVisibility}>{props.buttonLabel}</button>
-      </div>
-      <div style={showWhenVisible} className='toggableContent'>
+    <div className='collapse bg-base-200'>
+      <input type='checkbox' />
+      <div className='collapse-title text-xl font-medium'>{props.buttonLabel}</div>
+      <div className='collapse-content'>
         {props.children}
-        <button onClick={toggleVisibility}>cancel</button>
       </div>
     </div>
   )

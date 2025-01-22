@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom'
 const Blogs = () => {
   const dispatch = useDispatch()
   const blogs = useSelector(state => state.blogs)
-  const user = useSelector(state => state.user)
 
   const createBlog = async (blogObject) => {
     try {
@@ -31,22 +30,24 @@ const Blogs = () => {
   }
 
   return (
-    <div>
-      <h1>blogs</h1>
-
+    <div className='p-5 flex flex-col space-y-2'>
       <Toggalge buttonLabel='create new blog'>
         <BlogForm createBlog={createBlog} />
       </Toggalge>
+
+      <h1 className='text-2xl font-semibold'>blogs</h1>
 
       {blogs
         .slice()
         .sort((a, b) => b.likes - a.likes)
         .map((blog) => (
-          <p key={blog.id}>
-            <Link
-              to={`/blogs/${blog.id}`}
-            >{blog.title} - {blog.author} </Link>
-          </p>
+          <Link
+            key={blog.id}
+            to={`/blogs/${blog.id}`}
+            className='btn justify-start text-left p-auto'
+          >
+            <p>{blog.title} by {blog.author}</p>
+          </Link>
         ))}
     </div>
   )

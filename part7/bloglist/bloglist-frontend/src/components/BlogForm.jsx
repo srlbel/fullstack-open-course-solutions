@@ -18,28 +18,30 @@ const BlogForm = ({ createBlog }) => {
   }
 
   return (
-    <form onSubmit={addBlog}>
-      <div>
-        title
+    <form onSubmit={addBlog} className='gap-2 flex'>
+      <label className='input input-bordered flex items-center gap-2'>
+        Title
         <input
+          className='grow'
           type='text'
           value={title}
           name='title'
           placeholder='title'
           onChange={(event) => setTitle(event.target.value)}
         />
-      </div>
-      <div>
-        url
+      </label>
+      <label className='input input-bordered flex items-center gap-2'>
+        Url
         <input
+          className='grow'
           type='text'
           value={url}
           name='url'
           placeholder='url'
           onChange={(event) => setUrl(event.target.value)}
         />
-      </div>
-      <button type='submit'>post blog</button>
+      </label>
+      <button type='submit' className='btn btn-outline'>post blog</button>
     </form>
   )
 }

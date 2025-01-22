@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import { useSelector } from "react-redux"
 import userService from '../services/users'
 import { Link } from "react-router-dom"
+import LoadingScreen from "./LoadingScreen"
 
 const Users = () => {
   const [users, setUsers] = useState([])
@@ -21,28 +21,28 @@ const Users = () => {
     fetchUsers()
   }, [])
 
-  if (loading) return <div> Loading...</div>
+  if (loading) return <LoadingScreen />
 
   return (
-    <>
-      <h1>users</h1>
-      <table>
+    <div className="p-5 space-y-2 flex flex-col items-start">
+      <h1 className="text-2xl font-semibold">users</h1>
+      <table className="table">
         <thead>
           <tr>
-            <td></td>
+            <td>user</td>
             <th>blogs created</th>
           </tr>
         </thead>
         <tbody>
           {users.map(user =>
-            <tr key={user.id}>
-              <td><Link to={`/users/${user.id}`}>{user.name}</Link></td>
+            <tr key={user.id} className="hover">
+              <td><Link className='link' to={`/users/${user.id}`}>{user.name}</Link></td>
               <td>{user.blogs.length}</td>
             </tr>
           )}
         </tbody>
       </table>
-    </>
+    </div>
   )
 }
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import './styles/notification.css'
 import Notification from './components/Notification'
+import LoadingScreen from './views/LoadingScreen'
 import blogService from './services/blogs'
 import { useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
@@ -33,7 +33,7 @@ const App = () => {
   }, [dispatch])
 
 
-  if (loading) return <p> Loading...</p>
+  if (loading) return <LoadingScreen />
 
   return (
     <Router>
