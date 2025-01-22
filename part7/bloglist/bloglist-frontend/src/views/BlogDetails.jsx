@@ -3,6 +3,7 @@ import blogService from '../services/blogs'
 import { useEffect, useState } from "react"
 import { likeBlog, deleteBlog } from '../reducers/blogsReducer'
 import { useDispatch, useSelector } from "react-redux"
+import CommentForm from "../components/CommentForm"
 
 const BlogDetails = () => {
   const { id } = useParams()
@@ -17,7 +18,7 @@ const BlogDetails = () => {
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const response = await blogService.getOne(id)
+        const response = await blogService.getComments(id)
         setBlog(response)
         setLoading(false)
       } catch (e) {
@@ -68,6 +69,26 @@ const BlogDetails = () => {
     }, 5000)
   }
 
+  const addComment = async (commentData) => {
+    const text = commentData
+    const newComment = await blogService.addComment(id, text)
+    setBlog({
+      ...blog, comments: blog.comments.concat(newComment)
+    })
+
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      payload: {
+        message: `added comment '${newComment.text}'.`,
+        type: 'success',
+      },
+    })
+
+    setTimeout(() => {
+      dispatch({ type: 'CLEAR_NOTIFICATION' })
+    }, 5000)
+  }
+
   if (isLoading) return <div>Loading...</div>
 
   return (
@@ -77,6 +98,12 @@ const BlogDetails = () => {
       <p>{blog.likes} likes <button onClick={() => updateBlog(id, blog)}> like </button></p>
       <p>added by {blog.author}</p>
       {isOwner && <button onClick={() => removeBlog(id, blog)}>delete</button>}
+
+      <h2>comments</h2>
+      <CommentForm onSubmit={addComment} />
+      <ul>
+        {blog.comments.map(comment => <li key={comment.id}>{comment.text}</li>)}
+      </ul>
     </>
   )
 }
