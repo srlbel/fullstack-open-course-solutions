@@ -20,7 +20,6 @@ The course materials can be found at [their website](https://fullstackopen.com/)
 |    [Part 10]()     | <ul><li>- [ ] </li> </ul> |
 |    [Part 11]()     | <ul><li>- [ ] </li> </ul> |
 |    [Part 12]()     | <ul><li>- [ ] </li> </ul> |
-|    [Part 13]()     | <ul><li>- [ ] </li> </ul> |
 
 ## Certificates
 - [Fullstack Certificate](./certificates/certificate-fullstack.png)
