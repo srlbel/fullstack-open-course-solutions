@@ -1,4 +1,4 @@
-import { isNotNumber } from "./utils";
+// import { isNotNumber } from "./utils";
 
 type Rating = "Too bad" | "Almost There" | "Nice!";
 
@@ -17,7 +17,7 @@ type Args = {
   days: number[];
 };
 
-function exerciseCalculator(args: Args): calculatorOutput {
+export function exerciseCalculator(args: Args): calculatorOutput {
   const { days, target } = args;
   const periodLenght = days.length;
   const trainingDays = days.filter((day) => day > 0).length;
@@ -50,26 +50,26 @@ function exerciseCalculator(args: Args): calculatorOutput {
   };
 }
 
-const parseArguments = (args: string[]): Args => {
-  if (args.length < 12) throw new Error("Not enough arguments");
-  if (args.length > 12) throw new Error("To many arguments");
+// const parseArguments = (args: string[]): Args => {
+//   if (args.length < 12) throw new Error("Not enough arguments");
+//   if (args.length > 12) throw new Error("To many arguments");
 
-  const target = args[2];
-  const days = args.slice(3).map((day) => Number(day));
+//   const target = args[2];
+//   const days = args.slice(3).map((day) => Number(day));
 
-  const isNumbers = days.map((day) => !isNotNumber(day)).every(Boolean);
+//   const isNumbers = days.map((day) => !isNotNumber(day)).every(Boolean);
 
-  console.log(days);
+//   console.log(days);
 
-  if (!isNotNumber(target) && isNumbers) {
-    return {
-      target: Number(target),
-      days,
-    };
-  } else {
-    throw new Error("Provided args where not numbers.");
-  }
-};
+//   if (!isNotNumber(target) && isNumbers) {
+//     return {
+//       target: Number(target),
+//       days,
+//     };
+//   } else {
+//     throw new Error("Provided args where not numbers.");
+//   }
+// };
 
-const args = parseArguments(process.argv);
-console.log(exerciseCalculator(args));
+// const args = parseArguments(process.argv);
+// console.log(exerciseCalculator(args));
