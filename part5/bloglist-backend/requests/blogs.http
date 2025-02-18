@@ -1,0 +1,19 @@
+### Post a blog
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: Bearer <jwt_token>
+
+{
+  "title": "test",
+  "url": "String",
+  "likes": {{$randomInt 0 20}}
+}
+
+
+### get all blogs
+GET http://localhost:3001/api/blogs
+
+
+### delete a blog
+DELETE http://localhost:3001/api/blogs/67608351bd239324616eac30
+Authorization: Bearer <jwt_token>
