@@ -1,21 +1,15 @@
-import { JSX } from 'react'
+import { JSX } from "react";
+import Part from "./Part";
+import { CoursePart } from "../types";
 
-type Content = {
-  name: string,
-  exerciseCount: number
-}
-
-interface ContentProps {
-  content: Content[];
-}
-
-const Content = ({ content } : ContentProps): JSX.Element => {
+const Content = ({ parts }: { parts: CoursePart[] }): JSX.Element => {
   return (
     <>
-    {content.map((c, i) => <p key={i}>{c.name} {c.exerciseCount}</p>)}
+      {parts.map((c) => (
+        <Part key={c.name} part={c} />
+      ))}
     </>
-  )
-
-}
+  );
+};
 
 export default Content;
