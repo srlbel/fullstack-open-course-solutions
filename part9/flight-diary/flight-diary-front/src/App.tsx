@@ -7,7 +7,7 @@ function App() {
   const [diaries, setDiaries] = useState<DiaryEntry[]>([]);
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchDiaries = async () => {
       try {
         const entries = await diaryService.getDiaries();
         setDiaries(entries);
@@ -16,7 +16,7 @@ function App() {
       }
     };
 
-    fetch();
+    fetchDiaries();
   }, []);
 
   return (
