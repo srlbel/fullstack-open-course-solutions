@@ -11,7 +11,8 @@ export const toNewPatient = (object: unknown): NoIdPatient => {
     "gender" in object &&
     "dateOfBirth" in object &&
     "ssn" in object &&
-    "occupation" in object
+    "occupation" in object &&
+    "entries" in object
   ) {
     const newEntry: NoIdPatient = {
       name: z.string().parse(object.name),
@@ -19,6 +20,7 @@ export const toNewPatient = (object: unknown): NoIdPatient => {
       gender: z.string().parse(object.gender),
       occupation: z.string().parse(object.occupation),
       ssn: z.string().parse(object.ssn),
+      entries: z.array(z.object({ type: z.string() })).parse(object.entries),
     };
 
     return newEntry;

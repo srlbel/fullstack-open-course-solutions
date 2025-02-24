@@ -1,5 +1,5 @@
 import express, { Response } from "express";
-import type { NonSensitivePatientEntry } from "../types";
+import type { NonSensitivePatientEntry, PatientEntry } from "../types";
 import patientsService from "../services/patients";
 import { toNewPatient } from "../utils";
 import { z } from "zod";
@@ -23,6 +23,15 @@ routes.post("/", (req, res) => {
       res.status(400).send({ error: "unknown error" });
     }
   }
+});
+
+routes.get("/:id", (req, res) => {
+  const { id } = req.params;
+  const patient: PatientEntry | undefined = patientsService.getOnePatient(id);
+
+  if (!patient) res.status(404).json({ error: "patient not found" });
+
+  res.json(patient);
 });
 
 export default routes;
