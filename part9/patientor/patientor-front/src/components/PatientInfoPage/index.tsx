@@ -6,6 +6,7 @@ import patients from "../../services/patients";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import diagnosis from "../../services/diagnosis";
+import Entries from "./Entries";
 
 const PatientInfoPage = () => {
   const id = useParams().id as string;
@@ -15,7 +16,7 @@ const PatientInfoPage = () => {
     gender: Gender.Other,
     name: "",
     occupation: "",
-    dateOfBirth: "1-1-2000",
+    dateOfBirth: "",
     ssn: "",
     entries: [],
   });
@@ -60,30 +61,11 @@ const PatientInfoPage = () => {
             <Typography>No entries available.</Typography>
           ) : (
             info.entries.map((entry) => (
-              <Box key={entry.id}>
-                <Typography>
-                  <strong>{entry.date}</strong>: {entry.description}
-                </Typography>
-
-                {entry.diagnosisCodes && entry.diagnosisCodes.length > 0 && (
-                  <ul>
-                    {entry.diagnosisCodes.map((code) => {
-                      const diagnosis = diagnosisList.find(
-                        (d) => d.code === code
-                      );
-                      return (
-                        <li key={code}>
-                          <Typography>
-                            {diagnosis
-                              ? `${diagnosis.code} ${diagnosis.name}`
-                              : code}
-                          </Typography>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                )}
-              </Box>
+              <Entries
+                entry={entry}
+                key={entry.id}
+                diagnosisList={diagnosisList}
+              />
             ))
           )}
         </Box>
