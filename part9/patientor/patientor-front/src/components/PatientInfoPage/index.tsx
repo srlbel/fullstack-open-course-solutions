@@ -1,10 +1,11 @@
 import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Gender, Patient } from "../../types";
+import { Diagnosis, Gender, Patient } from "../../types";
 import { useParams } from "react-router-dom";
 import patients from "../../services/patients";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
+import diagnosis from "../../services/diagnosis";
 
 const PatientInfoPage = () => {
   const id = useParams().id as string;
@@ -19,14 +20,21 @@ const PatientInfoPage = () => {
     entries: [],
   });
 
+  const [diagnosisList, setDianosisList] = useState<Diagnosis[]>([]);
+
   useEffect(() => {
     const fetchPatientInfo = async () => {
       const data = await patients.getOne(id);
-      console.log(data);
       setInfo(data);
     };
 
+    const fetchDianosisInfo = async () => {
+      const data = await diagnosis.getAll();
+      setDianosisList(data);
+    };
+
     fetchPatientInfo();
+    fetchDianosisInfo();
   }, []);
 
   return (
@@ -59,11 +67,20 @@ const PatientInfoPage = () => {
 
                 {entry.diagnosisCodes && entry.diagnosisCodes.length > 0 && (
                   <ul>
-                    {entry.diagnosisCodes.map((diagnose) => (
-                      <li key={diagnose}>
-                        <Typography>{diagnose}</Typography>
-                      </li>
-                    ))}
+                    {entry.diagnosisCodes.map((code) => {
+                      const diagnosis = diagnosisList.find(
+                        (d) => d.code === code
+                      );
+                      return (
+                        <li key={code}>
+                          <Typography>
+                            {diagnosis
+                              ? `${diagnosis.code} ${diagnosis.name}`
+                              : code}
+                          </Typography>
+                        </li>
+                      );
+                    })}
                   </ul>
                 )}
               </Box>
